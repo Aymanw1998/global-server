@@ -1,0 +1,29 @@
+import express from "express";
+import multer from "multer";
+import {
+  uploadFile,
+  getFile,
+  deleteFile,
+  listFiles,
+  createFolder,
+  renameF,
+  getStorageStats,
+} from "../controllers/storage.controller.js";
+
+const router = express.Router();
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {fileSize:1024*1024*1024},
+});
+router.get("/stats", getStorageStats);
+router.get("/list", listFiles);
+router.get("/file", getFile);
+router.get("/file/:name", getFile);
+router.post("/folder", createFolder);
+router.post("/upload", upload.single("file"), uploadFile);
+router.post("/upload-chunk", chunkUpload.single("ch
+router.patch("/rename", renameF);
+router.delete("/delete", deleteFile);
+
+export default router;
