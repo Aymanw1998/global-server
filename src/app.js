@@ -10,6 +10,7 @@ import { connectDB } from "./config/db.js";
 import healthRoutes from "./routes/health.routes.js";
 import dataRoutes from "./routes/data.routes.js";
 import storageRoutes from "./routes/storage.routes.js";
+import aiRoutes from "./routes/ai.routes.js";
 
 dotenv.config();
 
@@ -18,8 +19,11 @@ const app = express();
 const STORAGE_ROOT =
   process.env.FILE_STORAGE_ROOT || "/home/wahbani/storage";
 
-await connectDB();
-
+if (process.env.SKIP_DB_CONNECT === "true") {
+  console.log("Skipping DB connection");
+} else {
+  await connectDB();
+}
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
@@ -87,6 +91,7 @@ app.use((req, res, next) => {
 app.use("/health", healthRoutes);
 app.use("/api/data", dataRoutes);
 app.use("/api/storage", storageRoutes);
+app.use("/api/ai", aiRoutes);
 
 // static serving for real files
 //app.use("/api/storage", express.static(path.resolve(STORAGE_ROOT)));
