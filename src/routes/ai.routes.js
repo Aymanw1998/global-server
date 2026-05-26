@@ -8,6 +8,12 @@ router.post("/chat", async (req, res) => {
   try {
     const { message, context = {}, project = "global" } = req.body || {};
 
+    console.log("[Global Server] Incoming /api/ai/chat request", {
+      project,
+      message,
+      context,
+    });
+
     if (!message || !String(message).trim()) {
       return res.status(400).json({
         success: false,
@@ -19,6 +25,11 @@ router.post("/chat", async (req, res) => {
       message: String(message).trim(),
       context,
       project,
+    });
+
+    console.log("[Global Server] Returning AI response to caller", {
+      project,
+      result,
     });
 
     return res.json(result);
